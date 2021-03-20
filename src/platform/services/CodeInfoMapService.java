@@ -4,18 +4,19 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import platform.entities.CodeInfo;
 import platform.model.CodeModel;
+import platform.model.CodeRepository;
 
 import java.time.LocalDateTime;
 import java.util.Comparator;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
 public class CodeInfoService {
 
     CodeModel codeModel;
+
+    CodeRepository codeRepository;
 
     public CodeInfoService() {
     }
@@ -39,9 +40,9 @@ public class CodeInfoService {
         List<CodeInfo> codeInfos = codeModel.getCodeInfoMap().values().stream().sorted(new Comparator<CodeInfo>() {
             @Override
             public int compare(CodeInfo o1, CodeInfo o2) {
-                if (o1.getDate().isBefore(o2.getDate())) {
+                if (o1.getDateTime().isBefore(o2.getDateTime())) {
                     return 1;
-                } else if (o2.getDate().isBefore(o1.getDate())) {
+                } else if (o2.getDateTime().isBefore(o1.getDateTime())) {
                     return -1;
                 } else {
                     return 0;
