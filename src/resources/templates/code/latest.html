@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Latest</title>
+    <link rel="stylesheet" type="text/css" href="../../static/css/style.css">
+</head>
+<body>
+<table>
+    <thead>
+    </thead>
+    <tbody>
+    <tr th:each="codeDTO : ${last10}">
+        <td>
+            <span id="load_date"  th:text="${codeDTO.date}"></span>
+            <pre id="code_snippet"  th:text="${codeDTO.code}"></pre>
+        </td>
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>
