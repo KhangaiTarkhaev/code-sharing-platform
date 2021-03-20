@@ -22,7 +22,7 @@ public class CodeInfoDTO {
     public CodeInfoDTO(CodeInfo codeInfo) {
         setId(codeInfo.getId());
         setCode(codeInfo.getCode());
-        setDate(codeInfo.getDate());
+        setDate(codeInfo.getLoadDateTime());
     }
 
     public CodeInfoDTO(Long id, String code) {

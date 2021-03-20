@@ -12,17 +12,15 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-public class CodeInfoService {
+public class CodeInfoMapService {
 
     CodeModel codeModel;
 
-    CodeRepository codeRepository;
-
-    public CodeInfoService() {
+    public CodeInfoMapService() {
     }
 
     @Autowired
-    public CodeInfoService(CodeModel codeModel) {
+    public CodeInfoMapService(CodeModel codeModel) {
         this.codeModel = codeModel;
     }
 
@@ -31,8 +29,7 @@ public class CodeInfoService {
     }
 
     public CodeInfo saveCodeInfo(CodeInfo codeInfo) {
-        codeInfo.setLoadDate(LocalDateTime.now());
-        codeModel.putInEntryMapAndAutoGenerateId(codeInfo);
+        codeModel.saveInMap(codeInfo);
         return codeInfo;
     }
 
@@ -40,9 +37,9 @@ public class CodeInfoService {
         List<CodeInfo> codeInfos = codeModel.getCodeInfoMap().values().stream().sorted(new Comparator<CodeInfo>() {
             @Override
             public int compare(CodeInfo o1, CodeInfo o2) {
-                if (o1.getDateTime().isBefore(o2.getDateTime())) {
+                if (o1.getLoadDateTime().isBefore(o2.getLoadDateTime())) {
                     return 1;
-                } else if (o2.getDateTime().isBefore(o1.getDateTime())) {
+                } else if (o2.getLoadDateTime().isBefore(o1.getLoadDateTime())) {
                     return -1;
                 } else {
                     return 0;

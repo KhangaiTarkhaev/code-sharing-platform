@@ -16,12 +16,12 @@ public class CodeInfoDTOService {
     public List<CodeInfoDTO> convertListCodeInfoToCodeDTOList(List<CodeInfo> codeInfos) {
         List<CodeInfoDTO> codeInfoDTOList = new ArrayList<>();
         for (CodeInfo codeInfo : codeInfos) {
-            codeInfoDTOList.add(new CodeInfoDTO(codeInfo.getCode(), codeInfo.getDate()));
+            codeInfoDTOList.add(new CodeInfoDTO(codeInfo.getCode(), codeInfo.getLoadDateTime()));
         }
         return codeInfoDTOList;
     }
 
     public CodeInfoDTO convertCodeInfoToCodeDTO(CodeInfo codeInfo) {
-        return new CodeInfoDTO(codeInfo.getCode(), codeInfo.getDate());
+        return new CodeInfoDTO(codeInfo.getCode(), codeInfo.getLoadDateTime());
     }
 }

@@ -9,23 +9,20 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import platform.entities.CodeInfo;
 import platform.DTO.CodeInfoDTO;
 import platform.services.CodeInfoDTOService;
-import platform.services.CodeInfoService;
+import platform.services.CodeInfoMapService;
 import javax.servlet.http.HttpServletResponse;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/code")
 public class CodeController {
 
-    CodeInfoService codeInfoService;
+    CodeInfoMapService codeInfoMapService;
 
     CodeInfoDTOService codeInfoDTOService;
 
     @Autowired
-    public CodeController(CodeInfoService codeInfoService, CodeInfoDTOService codeInfoDTOService) {
-        this.codeInfoService = codeInfoService;
+    public CodeController(CodeInfoMapService codeInfoMapService, CodeInfoDTOService codeInfoDTOService) {
+        this.codeInfoMapService = codeInfoMapService;
         this.codeInfoDTOService = codeInfoDTOService;
     }
 
@@ -37,7 +34,7 @@ public class CodeController {
 
     @GetMapping("/{id}")
     public String getCodeById(@PathVariable Long id, Model model) {
-        CodeInfo codeInfo = codeInfoService.findCodeInfoById(id);
+        CodeInfo codeInfo = codeInfoMapService.findCodeInfoById(id);
         CodeInfoDTO codeInfoDTOResponse =codeInfoDTOService.convertCodeInfoToCodeDTO(codeInfo);
         model.addAttribute("date", codeInfoDTOResponse.getDate());
         model.addAttribute("code", codeInfoDTOResponse.getCode());
@@ -47,7 +44,7 @@ public class CodeController {
     @GetMapping("/latest")
     public String getLatestCodeInfos(Model model) {
         model.addAttribute("last10",
-                codeInfoDTOService.convertListCodeInfoToCodeDTOList(codeInfoService.getLatest10CodeInfo()));
+                codeInfoDTOService.convertListCodeInfoToCodeDTOList(codeInfoMapService.getLatest10CodeInfo()));
         return "code/latest";
     }
 

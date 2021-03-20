@@ -1,35 +1,43 @@
 package platform.entities;
 
-import com.fasterxml.jackson.annotation.JsonView;
-
+import javax.persistence.*;
 import java.time.LocalDateTime;
 
-@JsonView(Views.PublicView.class)
+@Entity
+@Table
 public class CodeInfo {
 
-    @JsonView(Views.OnlyIdView.class)
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @JsonView(Views.CodeInfoAndDateView.class)
+    @Column
     private String code;
 
-    @JsonView({Views.CodeInfoAndDateView.class, Views.OnlyDateView.class})
-    private LocalDateTime date;
+    @Column
+    private LocalDateTime loadDateTime;
+
+    @PrePersist
+    protected void prePersist() {
+        if (this.loadDateTime == null) {
+            loadDateTime = LocalDateTime.now();
+        }
+    }
 
     public CodeInfo() {
     }
 
+
     public CodeInfo(String code) {
         this.code = code;
-        this.date = LocalDateTime.now();
     }
 
-    public LocalDateTime getDate() {
-        return date;
+    public LocalDateTime getLoadDateTime() {
+        return loadDateTime;
     }
 
     public void setLoadDate(LocalDateTime date) {
-        this.date = date;
+        this.loadDateTime = date;
     }
 
     public String getCode() {
@@ -48,16 +56,17 @@ public class CodeInfo {
         this.id = id;
     }
 
-    public void setDate(LocalDateTime date) {
-        this.date = date;
+    public void setLoadDateTime(LocalDateTime date) {
+        this.loadDateTime = date;
     }
 
     @Override
     public String toString() {
         return "CodeInfo{" +
                 "code='" + code + '\'' +
-                ", date='" + date + '\'' +
+                ", date='" + loadDateTime + '\'' +
                 '}';
     }
+
 }
 
