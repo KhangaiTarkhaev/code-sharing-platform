@@ -13,15 +13,15 @@ import java.util.stream.Collectors;
 
 @Profile("map")
 @Service
-public class CodeInfoMapService implements CodeInfoService{
+public class CodeInfoMapPersistenceService implements CodeInfoPersistenceService {
 
     CodeInfosMapModel codeInfosMapModel;
 
-    public CodeInfoMapService() {
+    public CodeInfoMapPersistenceService() {
     }
 
     @Autowired
-    public CodeInfoMapService(CodeInfosMapModel codeInfosMapModel) {
+    public CodeInfoMapPersistenceService(CodeInfosMapModel codeInfosMapModel) {
         this.codeInfosMapModel = codeInfosMapModel;
     }
 
@@ -34,6 +34,16 @@ public class CodeInfoMapService implements CodeInfoService{
     public CodeInfo save(CodeInfo codeInfo) {
         codeInfosMapModel.saveInMap(codeInfo);
         return codeInfo;
+    }
+
+    @Override
+    public CodeInfo saveAfterView(CodeInfo codeInfo) {
+        return null;
+    }
+
+    @Override
+    public <T extends CodeInfo> Iterable<T> saveListAfterView(Iterable<T> codeInfos) {
+        return null;
     }
 
     @Override

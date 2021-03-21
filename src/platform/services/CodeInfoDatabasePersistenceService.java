@@ -15,11 +15,11 @@ import java.util.UUID;
 
 @Profile("h2db")
 @Service
-public class CodeInfoDatabaseService implements CodeInfoService {
+public class CodeInfoDatabasePersistenceService implements CodeInfoPersistenceService {
 
     CodeRepository codeRepository;
 
-    public CodeInfoDatabaseService(CodeRepository codeRepository) {
+    public CodeInfoDatabasePersistenceService(CodeRepository codeRepository) {
         this.codeRepository = codeRepository;
     }
 
@@ -27,10 +27,34 @@ public class CodeInfoDatabaseService implements CodeInfoService {
     public CodeInfo findById(UUID id) {
         Optional<CodeInfo> codeInfoOptional = codeRepository.findById(id);
         if (codeInfoOptional.isPresent()) {
-            return codeInfoOptional.get();
+            CodeInfo codeInfo = codeInfoOptional.get();
+         //   codeRepository.save(decrementViews(codeInfoOptional.get()));
+            return codeInfo;
         } else {
             throw new RuntimeException("Cannot find CodeInfo by Id");
         }
+    }
+
+//    private CodeInfo decrementViews(CodeInfo codeInfo) {
+//        codeInfo.setViews(codeInfo.getViews() - 1);
+//        return codeInfo;
+//    }
+
+    public CodeInfo saveAfterView(CodeInfo codeInfo) {
+        decrementViews(codeInfo);
+        save(codeInfo);
+        return codeInfo;
+    }
+
+    public<T extends CodeInfo> Iterable<T> saveListAfterView(Iterable<T> codeInfos) {
+        for (CodeInfo codeInfo : codeInfos) {
+            decrementViews(codeInfo);
+        }
+        return codeRepository.saveAll(codeInfos);
+    }
+
+    private void decrementViews(CodeInfo codeInfo) {
+        codeInfo.setViews(codeInfo.getViews() - 1);
     }
 
     @Override
@@ -40,11 +64,14 @@ public class CodeInfoDatabaseService implements CodeInfoService {
 
     @Override
     public List<CodeInfo> getLast10List() {
-        Page<CodeInfo> codeInfosPage = codeRepository.findAll(PageRequest.of(0,10, Sort.by(Sort.Direction.DESC, "loadDateTime")));
+        PageRequest pageRequest = PageRequest.of(0,10, Sort.by(Sort.Direction.DESC, "loadDateTime"));
+        Page<CodeInfo> codeInfosPage = codeRepository.findAll(pageRequest);
         List<CodeInfo> latest10CodeInfosList = new LinkedList<>();
         if (codeInfosPage.hasContent()) {
             latest10CodeInfosList = codeInfosPage.getContent();
         }
         return latest10CodeInfosList;
     }
+
+
 }

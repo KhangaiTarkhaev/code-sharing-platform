@@ -4,6 +4,8 @@ import org.springframework.stereotype.Service;
 import platform.DTO.CodeInfoDTO;
 import platform.entities.CodeInfo;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,6 +24,17 @@ public class CodeInfoDTOService {
     }
 
     public CodeInfoDTO convertCodeInfoToCodeDTO(CodeInfo codeInfo) {
-        return new CodeInfoDTO(codeInfo.getCode(), codeInfo.getLoadDateTime());
+        CodeInfoDTO codeInfoDTO = new CodeInfoDTO(codeInfo.getCode(), codeInfo.getLoadDateTime());
+        codeInfoDTO.setTime(Duration.between(LocalDateTime.now(), codeInfo.getExpireTime()).getSeconds());
+        codeInfo.setViews();
+        return ;
+    }
+
+    public CodeInfo convertDTOtoCodeInfo(CodeInfoDTO codeInfoDTO) {
+        CodeInfo codeInfo = new CodeInfo();
+        codeInfo.setCode(codeInfoDTO.getCode());
+        codeInfo.setExpireTime(LocalDateTime.now().plusSeconds(codeInfoDTO.getTime()));
+        codeInfo.setViews(codeInfoDTO.getViews());
+        return codeInfo;
     }
 }

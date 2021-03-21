@@ -9,22 +9,23 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import platform.entities.CodeInfo;
 import platform.DTO.CodeInfoDTO;
 import platform.services.CodeInfoDTOService;
-import platform.services.CodeInfoService;
+import platform.services.CodeInfoPersistenceService;
 
 import javax.servlet.http.HttpServletResponse;
+import java.util.List;
 import java.util.UUID;
 
 @Controller
 @RequestMapping("/code")
 public class CodeController {
 
-    CodeInfoService codeInfoService;
+    CodeInfoPersistenceService codeInfoPersistenceService;
 
     CodeInfoDTOService codeInfoDTOService;
 
     @Autowired
-    public CodeController(CodeInfoService codeInfoService, CodeInfoDTOService codeInfoDTOService) {
-        this.codeInfoService = codeInfoService;
+    public CodeController(CodeInfoPersistenceService codeInfoPersistenceService, CodeInfoDTOService codeInfoDTOService) {
+        this.codeInfoPersistenceService = codeInfoPersistenceService;
         this.codeInfoDTOService = codeInfoDTOService;
     }
 
@@ -36,8 +37,9 @@ public class CodeController {
 
     @GetMapping("/{id}")
     public String getCodeById(@PathVariable UUID id, Model model) {
-        CodeInfo codeInfo = codeInfoService.findById(id);
+        CodeInfo codeInfo = codeInfoPersistenceService.findById(id);
         CodeInfoDTO codeInfoDTOResponse =codeInfoDTOService.convertCodeInfoToCodeDTO(codeInfo);
+        codeInfoPersistenceService.saveAfterView(codeInfo);
         model.addAttribute("date", codeInfoDTOResponse.getDate());
         model.addAttribute("code", codeInfoDTOResponse.getCode());
         return "code/code";
@@ -45,8 +47,10 @@ public class CodeController {
 
     @GetMapping("/latest")
     public String getLatestCodeInfos(Model model) {
+        List<CodeInfo> codeInfoList = codeInfoPersistenceService.getLast10List();
         model.addAttribute("last10",
-                codeInfoDTOService.convertListCodeInfoToCodeDTOList(codeInfoService.getLast10List()));
+                codeInfoDTOService.convertListCodeInfoToCodeDTOList(codeInfoList));
+        codeInfoPersistenceService.saveListAfterView(codeInfoList);
         return "code/latest";
     }
 

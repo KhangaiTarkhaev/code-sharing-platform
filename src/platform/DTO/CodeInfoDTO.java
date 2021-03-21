@@ -39,6 +39,12 @@ public class CodeInfoDTO {
         setDate(dateTime);
     }
 
+    public CodeInfoDTO(String code, Long time, Integer views) {
+        this.code = code;
+        this.time = time;
+        this.views = views;
+    }
+
     public String getId() {
         return id;
     }
@@ -61,5 +67,29 @@ public class CodeInfoDTO {
 
     public void setDate(LocalDateTime date) {
         this.date = date.format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss"));
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
+    }
+
+    public Long getTime() {
+        return time;
+    }
+
+    public void setTime(Long time) {
+        this.time = time;
+    }
+
+    public Integer getViews() {
+        return views;
+    }
+
+    public void setViews(Integer views) {
+        this.views = views;
     }
 }

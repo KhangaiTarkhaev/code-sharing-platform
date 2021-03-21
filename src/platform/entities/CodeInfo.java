@@ -22,8 +22,21 @@ public class CodeInfo {
     @Column
     private LocalDateTime expireTime;
 
+    @Transient
+    private Long expireTimeInSeconds;
+
     @Column
     private Integer views;
+
+    @PrePersist
+    protected void prePersist() {
+        if (this.loadDateTime == null) {
+            loadDateTime = LocalDateTime.now();
+        }
+        if (this.expireTime == null && expireTimeInSeconds != null) {
+            expireTime = loadDateTime.plusSeconds(expireTimeInSeconds);
+        }
+    }
 
     public LocalDateTime getExpireTime() {
         return expireTime;
@@ -41,12 +54,6 @@ public class CodeInfo {
         this.views = views;
     }
 
-    @PrePersist
-    protected void prePersist() {
-        if (this.loadDateTime == null) {
-            loadDateTime = LocalDateTime.now();
-        }
-    }
 
     public CodeInfo() {
     }
@@ -82,6 +89,14 @@ public class CodeInfo {
 
     public void setLoadDateTime(LocalDateTime date) {
         this.loadDateTime = date;
+    }
+
+    public Long getExpireTimeInSeconds() {
+        return expireTimeInSeconds;
+    }
+
+    public void setExpireTimeInSeconds(Long expireTimeInSeconds) {
+        this.expireTimeInSeconds = expireTimeInSeconds;
     }
 
     @Override
