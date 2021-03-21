@@ -2,6 +2,7 @@ package platform.entities;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Entity
 @Table
@@ -9,7 +10,7 @@ public class CodeInfo {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+    private UUID id;
 
     @Lob
     @Column(columnDefinition = "CLOB")
@@ -49,11 +50,11 @@ public class CodeInfo {
         this.code = code;
     }
 
-    public Long getId() {
+    public UUID getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(UUID id) {
         this.id = id;
     }
 

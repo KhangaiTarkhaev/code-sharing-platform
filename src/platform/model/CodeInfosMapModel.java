@@ -7,32 +7,24 @@ import platform.entities.CodeInfo;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 @Component
 @Profile("map")
 public class CodeInfosMapModel {
 
-    private static volatile CodeInfosMapModel instance;
-
-    private Long currentId = 0L;
-
-    private final Map<Long, CodeInfo> codeInfoMap = new HashMap<>();
+    private final Map<UUID, CodeInfo> codeInfoMap = new HashMap<>();
 
     public CodeInfosMapModel() {
 
     }
 
-    private Long incrementAndGetCurrentId() {
-        currentId++;
-        return currentId;
-    }
-
-    public Map<Long, CodeInfo> getCodeInfoMap() {
+    public Map<UUID, CodeInfo> getCodeInfoMap() {
         return codeInfoMap;
     }
 
     public CodeInfo saveInMap(CodeInfo codeInfo) {
-        Long id = incrementAndGetCurrentId();
+        UUID id = UUID.randomUUID();
         codeInfo.setId(id);
         codeInfo.setLoadDate(LocalDateTime.now());
         codeInfoMap.put(id ,codeInfo);

@@ -8,6 +8,7 @@ import platform.model.CodeInfosMapModel;
 
 import java.util.Comparator;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Profile("map")
@@ -25,7 +26,7 @@ public class CodeInfoMapService implements CodeInfoService{
     }
 
     @Override
-    public CodeInfo findById(Long id) {
+    public CodeInfo findById(UUID id) {
         return codeInfosMapModel.getCodeInfoMap().get(id);
     }
 

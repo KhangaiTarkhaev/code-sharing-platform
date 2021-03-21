@@ -9,10 +9,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import platform.entities.CodeInfo;
 import platform.DTO.CodeInfoDTO;
 import platform.services.CodeInfoDTOService;
-import platform.services.CodeInfoMapService;
 import platform.services.CodeInfoService;
 
 import javax.servlet.http.HttpServletResponse;
+import java.util.UUID;
 
 @Controller
 @RequestMapping("/code")
@@ -35,7 +35,7 @@ public class CodeController {
     }
 
     @GetMapping("/{id}")
-    public String getCodeById(@PathVariable Long id, Model model) {
+    public String getCodeById(@PathVariable UUID id, Model model) {
         CodeInfo codeInfo = codeInfoService.findById(id);
         CodeInfoDTO codeInfoDTOResponse =codeInfoDTOService.convertCodeInfoToCodeDTO(codeInfo);
         model.addAttribute("date", codeInfoDTOResponse.getDate());

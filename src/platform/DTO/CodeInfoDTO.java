@@ -5,6 +5,7 @@ import platform.entities.CodeInfo;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.UUID;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class CodeInfoDTO {
@@ -25,7 +26,7 @@ public class CodeInfoDTO {
         setDate(codeInfo.getLoadDateTime());
     }
 
-    public CodeInfoDTO(Long id, String code) {
+    public CodeInfoDTO(UUID id, String code) {
         setId(id);
         this.code = code;
     }
@@ -39,8 +40,8 @@ public class CodeInfoDTO {
         return id;
     }
 
-    public void setId(Long id) {
-        this.id = Long.toString(id);
+    public void setId(UUID id) {
+        this.id = id.toString();
     }
 
     public String getCode() {

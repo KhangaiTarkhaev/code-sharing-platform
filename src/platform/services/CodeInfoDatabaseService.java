@@ -11,6 +11,7 @@ import platform.model.CodeRepository;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Profile("h2db")
 @Service
@@ -23,7 +24,7 @@ public class CodeInfoDatabaseService implements CodeInfoService {
     }
 
     @Override
-    public CodeInfo findById(Long id) {
+    public CodeInfo findById(UUID id) {
         Optional<CodeInfo> codeInfoOptional = codeRepository.findById(id);
         if (codeInfoOptional.isPresent()) {
             return codeInfoOptional.get();

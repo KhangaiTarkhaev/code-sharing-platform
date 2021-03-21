@@ -7,6 +7,7 @@ import platform.entities.CodeInfo;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
-public interface CodeRepository extends CrudRepository<CodeInfo, Long> , PagingAndSortingRepository<CodeInfo, Long> {
+public interface CodeRepository extends CrudRepository<CodeInfo, UUID> , PagingAndSortingRepository<CodeInfo, UUID> {
 }
