@@ -12,12 +12,16 @@
 <form name="code">
     <textarea id="code_snippet">
     </textarea>
+    <input id="time_restriction" type="text"/>
+    <input id="views_restriction" type="text"/>
     <button id="send_snippet" type="submit" onclick="send()">Submit</button>
 </form>
 <script>
     function send() {
         let object = {
-            "code": document.getElementById("code_snippet").value
+            "code": document.getElementById("code_snippet").value,
+            "time": parseInt(document.getElementById("time_restriction").value),
+            "views":parseInt(document.getElementById("views_restriction").value)
         };
         let json = JSON.stringify(object);
         let xhr = new XMLHttpRequest();
@@ -28,7 +32,6 @@
             alert("Success!");
         }
     }
-
 </script>
 </body>
 </html>

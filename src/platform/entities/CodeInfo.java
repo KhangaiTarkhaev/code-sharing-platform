@@ -19,6 +19,28 @@ public class CodeInfo {
     @Column
     private LocalDateTime loadDateTime;
 
+    @Column
+    private LocalDateTime expireTime;
+
+    @Column
+    private Integer views;
+
+    public LocalDateTime getExpireTime() {
+        return expireTime;
+    }
+
+    public void setExpireTime(LocalDateTime expireTime) {
+        this.expireTime = expireTime;
+    }
+
+    public Integer getViews() {
+        return views;
+    }
+
+    public void setViews(Integer views) {
+        this.views = views;
+    }
+
     @PrePersist
     protected void prePersist() {
         if (this.loadDateTime == null) {

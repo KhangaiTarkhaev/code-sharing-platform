@@ -16,6 +16,9 @@ public class CodeInfoDTO {
 
     private String date;
 
+    private Long time;
+
+    private Integer views;
 
     public CodeInfoDTO() {
     }
