@@ -10,19 +10,21 @@ import platform.entities.CodeInfo;
 import platform.DTO.CodeInfoDTO;
 import platform.services.CodeInfoDTOService;
 import platform.services.CodeInfoMapService;
+import platform.services.CodeInfoService;
+
 import javax.servlet.http.HttpServletResponse;
 
 @Controller
 @RequestMapping("/code")
 public class CodeController {
 
-    CodeInfoMapService codeInfoMapService;
+    CodeInfoService codeInfoService;
 
     CodeInfoDTOService codeInfoDTOService;
 
     @Autowired
-    public CodeController(CodeInfoMapService codeInfoMapService, CodeInfoDTOService codeInfoDTOService) {
-        this.codeInfoMapService = codeInfoMapService;
+    public CodeController(CodeInfoService codeInfoService, CodeInfoDTOService codeInfoDTOService) {
+        this.codeInfoService = codeInfoService;
         this.codeInfoDTOService = codeInfoDTOService;
     }
 
@@ -34,7 +36,7 @@ public class CodeController {
 
     @GetMapping("/{id}")
     public String getCodeById(@PathVariable Long id, Model model) {
-        CodeInfo codeInfo = codeInfoMapService.findCodeInfoById(id);
+        CodeInfo codeInfo = codeInfoService.findById(id);
         CodeInfoDTO codeInfoDTOResponse =codeInfoDTOService.convertCodeInfoToCodeDTO(codeInfo);
         model.addAttribute("date", codeInfoDTOResponse.getDate());
         model.addAttribute("code", codeInfoDTOResponse.getCode());
@@ -44,7 +46,7 @@ public class CodeController {
     @GetMapping("/latest")
     public String getLatestCodeInfos(Model model) {
         model.addAttribute("last10",
-                codeInfoDTOService.convertListCodeInfoToCodeDTOList(codeInfoMapService.getLatest10CodeInfo()));
+                codeInfoDTOService.convertListCodeInfoToCodeDTOList(codeInfoService.getLast10List()));
         return "code/latest";
     }
 

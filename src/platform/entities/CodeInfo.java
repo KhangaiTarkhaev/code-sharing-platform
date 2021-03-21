@@ -11,7 +11,8 @@ public class CodeInfo {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @Column
+    @Lob
+    @Column(columnDefinition = "CLOB")
     private String code;
 
     @Column

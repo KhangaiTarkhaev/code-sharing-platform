@@ -4,22 +4,21 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 import platform.entities.CodeInfo;
 
-import javax.annotation.PostConstruct;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 
 @Component
 @Profile("map")
-public class CodeModel {
+public class CodeInfosMapModel {
 
-    private static volatile CodeModel instance;
+    private static volatile CodeInfosMapModel instance;
 
     private Long currentId = 0L;
 
     private final Map<Long, CodeInfo> codeInfoMap = new HashMap<>();
 
-    public CodeModel() {
+    public CodeInfosMapModel() {
 
     }
 

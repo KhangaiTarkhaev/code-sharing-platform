@@ -1,40 +1,43 @@
 package platform.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 import platform.entities.CodeInfo;
-import platform.model.CodeModel;
-import platform.model.CodeRepository;
+import platform.model.CodeInfosMapModel;
 
-import java.time.LocalDateTime;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Profile("map")
 @Service
-public class CodeInfoMapService {
+public class CodeInfoMapService implements CodeInfoService{
 
-    CodeModel codeModel;
+    CodeInfosMapModel codeInfosMapModel;
 
     public CodeInfoMapService() {
     }
 
     @Autowired
-    public CodeInfoMapService(CodeModel codeModel) {
-        this.codeModel = codeModel;
+    public CodeInfoMapService(CodeInfosMapModel codeInfosMapModel) {
+        this.codeInfosMapModel = codeInfosMapModel;
     }
 
-    public CodeInfo findCodeInfoById(Long id) {
-        return codeModel.getCodeInfoMap().get(id);
+    @Override
+    public CodeInfo findById(Long id) {
+        return codeInfosMapModel.getCodeInfoMap().get(id);
     }
 
-    public CodeInfo saveCodeInfo(CodeInfo codeInfo) {
-        codeModel.saveInMap(codeInfo);
+    @Override
+    public CodeInfo save(CodeInfo codeInfo) {
+        codeInfosMapModel.saveInMap(codeInfo);
         return codeInfo;
     }
 
-    public List<CodeInfo> getLatest10CodeInfo() {
-        List<CodeInfo> codeInfos = codeModel.getCodeInfoMap().values().stream().sorted(new Comparator<CodeInfo>() {
+    @Override
+    public List<CodeInfo> getLast10List() {
+        List<CodeInfo> codeInfos = codeInfosMapModel.getCodeInfoMap().values().stream().sorted(new Comparator<CodeInfo>() {
             @Override
             public int compare(CodeInfo o1, CodeInfo o2) {
                 if (o1.getLoadDateTime().isBefore(o2.getLoadDateTime())) {

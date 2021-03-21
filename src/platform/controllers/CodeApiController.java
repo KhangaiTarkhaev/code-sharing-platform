@@ -9,6 +9,7 @@ import platform.entities.CodeInfo;
 import platform.DTO.CodeInfoDTO;
 import platform.services.CodeInfoDTOService;
 import platform.services.CodeInfoMapService;
+import platform.services.CodeInfoService;
 
 import java.util.List;
 
@@ -16,13 +17,13 @@ import java.util.List;
 @RequestMapping("/api")
 public class CodeApiController {
 
-    CodeInfoMapService codeInfoMapService;
+    CodeInfoService codeInfoService;
 
     CodeInfoDTOService codeInfoDTOService;
 
     @Autowired
-    public CodeApiController(CodeInfoMapService codeInfoMapService, CodeInfoDTOService codeInfoDTOService) {
-        this.codeInfoMapService = codeInfoMapService;
+    public CodeApiController(CodeInfoService codeInfoService, CodeInfoDTOService codeInfoDTOService) {
+        this.codeInfoService = codeInfoService;
         this.codeInfoDTOService = codeInfoDTOService;
     }
 
@@ -30,7 +31,7 @@ public class CodeApiController {
    // @JsonView(Views.OnlyIdView.class)
     public ResponseEntity<CodeInfoDTO> apiCodeNew(@RequestBody CodeInfo code) {
         CodeInfoDTO responseCodeInfo = new CodeInfoDTO();
-        codeInfoMapService.saveCodeInfo(code);
+        codeInfoService.save(code);
         responseCodeInfo.setId(code.getId());
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-Type", "application/json");
@@ -40,7 +41,7 @@ public class CodeApiController {
     @GetMapping("/code/{id}")
  //   @JsonView(Views.CodeInfoAndDateView.class)
     public ResponseEntity<CodeInfoDTO> apiCodeById(@PathVariable Long id) {
-        CodeInfoDTO responseCodeInfo = codeInfoDTOService.convertCodeInfoToCodeDTO(codeInfoMapService.findCodeInfoById(id));
+        CodeInfoDTO responseCodeInfo = codeInfoDTOService.convertCodeInfoToCodeDTO(codeInfoService.findById(id));
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-Type", "application/json");
         return new ResponseEntity<>(responseCodeInfo, headers, HttpStatus.OK);
@@ -49,8 +50,7 @@ public class CodeApiController {
     @GetMapping("code/latest")
     public ResponseEntity<List<CodeInfoDTO>> getLatestCodeInfo() {
         List<CodeInfoDTO> codeInfoDTOList = codeInfoDTOService.
-                convertListCodeInfoToCodeDTOList(codeInfoMapService.
-                        getLatest10CodeInfo());
+                convertListCodeInfoToCodeDTOList(codeInfoService.getLast10List());
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-Type", "application/json");
         return new ResponseEntity<>(codeInfoDTOList, headers, HttpStatus.OK);

@@ -1,8 +1,12 @@
 package platform.model;
 
-import org.aspectj.apache.bcel.classfile.Code;
+
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.PagingAndSortingRepository;
+import platform.entities.CodeInfo;
 
-public interface CodeRepository extends CrudRepository<Code, Long> {
+import java.util.List;
+import java.util.Optional;
 
+public interface CodeRepository extends CrudRepository<CodeInfo, Long> , PagingAndSortingRepository<CodeInfo, Long> {
 }
