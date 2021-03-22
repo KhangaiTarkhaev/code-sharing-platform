@@ -15,30 +15,19 @@ import java.util.UUID;
 
 @Profile("h2db")
 @Service
-public class CodeInfoDatabasePersistenceService implements CodeInfoPersistenceService {
+public class CodeInfoDatabaseDataAccessService implements CodeInfoDataAccessService {
 
     CodeRepository codeRepository;
 
-    public CodeInfoDatabasePersistenceService(CodeRepository codeRepository) {
+    public CodeInfoDatabaseDataAccessService(CodeRepository codeRepository) {
         this.codeRepository = codeRepository;
     }
 
     @Override
-    public CodeInfo findById(UUID id) {
+    public Optional<CodeInfo> findById(UUID id) {
         Optional<CodeInfo> codeInfoOptional = codeRepository.findById(id);
-        if (codeInfoOptional.isPresent()) {
-            CodeInfo codeInfo = codeInfoOptional.get();
-         //   codeRepository.save(decrementViews(codeInfoOptional.get()));
-            return codeInfo;
-        } else {
-            throw new RuntimeException("Cannot find CodeInfo by Id");
-        }
+        return  codeInfoOptional;
     }
-
-//    private CodeInfo decrementViews(CodeInfo codeInfo) {
-//        codeInfo.setViews(codeInfo.getViews() - 1);
-//        return codeInfo;
-//    }
 
     public CodeInfo saveAfterView(CodeInfo codeInfo) {
         decrementViews(codeInfo);

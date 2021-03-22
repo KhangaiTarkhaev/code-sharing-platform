@@ -12,7 +12,10 @@ import java.util.List;
 @Service
 public class CodeInfoDTOService {
 
-    public CodeInfoDTOService() {
+    CodeInfoValidationService codeInfoValidationService;
+
+    public CodeInfoDTOService(CodeInfoValidationService codeInfoValidationService) {
+        this.codeInfoValidationService = codeInfoValidationService;
     }
 
     public List<CodeInfoDTO> convertListCodeInfoToCodeDTOList(List<CodeInfo> codeInfos) {
@@ -25,15 +28,23 @@ public class CodeInfoDTOService {
 
     public CodeInfoDTO convertCodeInfoToCodeDTO(CodeInfo codeInfo) {
         CodeInfoDTO codeInfoDTO = new CodeInfoDTO(codeInfo.getCode(), codeInfo.getLoadDateTime());
-        codeInfoDTO.setTime(Duration.between(LocalDateTime.now(), codeInfo.getExpireTime()).getSeconds());
-        codeInfo.setViews();
-        return ;
+        if (codeInfo.isLimitedViews()) {
+            codeInfoDTO.setViews(codeInfo.getViews());
+        } else {
+            codeInfoDTO.setViews(0);
+        }
+        if (codeInfo.isLimitedTime()) {
+            codeInfoDTO.setTime(Duration.between(LocalDateTime.now(), codeInfo.getExpireTime()).getSeconds());
+        } else {
+            codeInfoDTO.setTime(0L);
+        }
+        return codeInfoDTO;
     }
 
     public CodeInfo convertDTOtoCodeInfo(CodeInfoDTO codeInfoDTO) {
         CodeInfo codeInfo = new CodeInfo();
         codeInfo.setCode(codeInfoDTO.getCode());
-        codeInfo.setExpireTime(LocalDateTime.now().plusSeconds(codeInfoDTO.getTime()));
+        codeInfo.setExpireTimeInSeconds(codeInfoDTO.getTime());
         codeInfo.setViews(codeInfoDTO.getViews());
         return codeInfo;
     }

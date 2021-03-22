@@ -3,11 +3,12 @@ package platform.services;
 import platform.entities.CodeInfo;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
-public interface CodeInfoPersistenceService {
+public interface CodeInfoDataAccessService {
 
-    CodeInfo findById(UUID id);
+    Optional<CodeInfo> findById(UUID id);
 
     List<CodeInfo> getLast10List();
 

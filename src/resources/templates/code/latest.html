@@ -17,6 +17,8 @@
     <tr th:each="codeDTO : ${last10}">
         <td>
             <span id="load_date"  th:text="${codeDTO.date}"></span>
+            <p th:text="${codeDTO.getTime()}"></p>
+            <p th:text="${codeDTO.getViews()}"></p>
             <pre id="code_snippet">
                 <code>
                     <p th:text="${codeDTO.code}"></p>

@@ -9,24 +9,32 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import platform.entities.CodeInfo;
 import platform.DTO.CodeInfoDTO;
 import platform.services.CodeInfoDTOService;
-import platform.services.CodeInfoPersistenceService;
+import platform.services.CodeInfoDataAccessService;
+import platform.services.CodeInfoValidationService;
 
 import javax.servlet.http.HttpServletResponse;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Controller
 @RequestMapping("/code")
 public class CodeController {
 
-    CodeInfoPersistenceService codeInfoPersistenceService;
+    CodeInfoDataAccessService codeInfoDataAccessService;
 
     CodeInfoDTOService codeInfoDTOService;
 
+    CodeInfoValidationService codeInfoValidationService;
+
     @Autowired
-    public CodeController(CodeInfoPersistenceService codeInfoPersistenceService, CodeInfoDTOService codeInfoDTOService) {
-        this.codeInfoPersistenceService = codeInfoPersistenceService;
+    public CodeController(CodeInfoDataAccessService codeInfoDataAccessService, CodeInfoDTOService codeInfoDTOService,
+                          CodeInfoValidationService codeInfoValidationService) {
+        this.codeInfoDataAccessService = codeInfoDataAccessService;
         this.codeInfoDTOService = codeInfoDTOService;
+        this.codeInfoValidationService = codeInfoValidationService;
     }
 
     @GetMapping("/new")
@@ -37,20 +45,30 @@ public class CodeController {
 
     @GetMapping("/{id}")
     public String getCodeById(@PathVariable UUID id, Model model) {
-        CodeInfo codeInfo = codeInfoPersistenceService.findById(id);
-        CodeInfoDTO codeInfoDTOResponse =codeInfoDTOService.convertCodeInfoToCodeDTO(codeInfo);
-        codeInfoPersistenceService.saveAfterView(codeInfo);
-        model.addAttribute("date", codeInfoDTOResponse.getDate());
-        model.addAttribute("code", codeInfoDTOResponse.getCode());
+        Optional<CodeInfo> codeInfoOptional = codeInfoDataAccessService.findById(id);
+        if (codeInfoOptional.isPresent()) {
+            CodeInfo codeInfo = codeInfoOptional.get();
+            CodeInfoDTO codeInfoDTOResponse = codeInfoDTOService.convertCodeInfoToCodeDTO(codeInfo);
+            codeInfoDataAccessService.saveAfterView(codeInfo);
+            model.addAttribute("date", codeInfoDTOResponse.getDate());
+            model.addAttribute("code", codeInfoDTOResponse.getCode());
+            if (codeInfo.isLimitedViews()) model.addAttribute("viewsRestriction", codeInfoDTOResponse.getViews());
+            if (codeInfo.isLimitedTime())  model.addAttribute("timeRestriction", codeInfoDTOResponse.getTime());
+        }
         return "code/code";
     }
 
     @GetMapping("/latest")
     public String getLatestCodeInfos(Model model) {
-        List<CodeInfo> codeInfoList = codeInfoPersistenceService.getLast10List();
+        List<CodeInfo> codeInfoList = codeInfoDataAccessService.getLast10List();
+        List<CodeInfoDTO> codeInfoDTOList = new ArrayList<>();
+        for (CodeInfo codeInfo : codeInfoList) {
+            if (codeInfoValidationService.isValid(codeInfo)) codeInfoDTOList.add(codeInfoDTOService.
+                    convertCodeInfoToCodeDTO(codeInfo));
+        }
         model.addAttribute("last10",
-                codeInfoDTOService.convertListCodeInfoToCodeDTOList(codeInfoList));
-        codeInfoPersistenceService.saveListAfterView(codeInfoList);
+                codeInfoDTOList);
+        codeInfoDataAccessService.saveListAfterView(codeInfoList);
         return "code/latest";
     }
 

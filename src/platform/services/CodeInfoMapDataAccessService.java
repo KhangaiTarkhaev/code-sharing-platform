@@ -8,26 +8,27 @@ import platform.model.CodeInfosMapModel;
 
 import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Profile("map")
 @Service
-public class CodeInfoMapPersistenceService implements CodeInfoPersistenceService {
+public class CodeInfoMapDataAccessService implements CodeInfoDataAccessService {
 
     CodeInfosMapModel codeInfosMapModel;
 
-    public CodeInfoMapPersistenceService() {
+    public CodeInfoMapDataAccessService() {
     }
 
     @Autowired
-    public CodeInfoMapPersistenceService(CodeInfosMapModel codeInfosMapModel) {
+    public CodeInfoMapDataAccessService(CodeInfosMapModel codeInfosMapModel) {
         this.codeInfosMapModel = codeInfosMapModel;
     }
 
     @Override
-    public CodeInfo findById(UUID id) {
-        return codeInfosMapModel.getCodeInfoMap().get(id);
+    public Optional<CodeInfo> findById(UUID id) {
+        return Optional.of(codeInfosMapModel.getCodeInfoMap().get(id));
     }
 
     @Override

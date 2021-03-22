@@ -28,14 +28,26 @@ public class CodeInfo {
     @Column
     private Integer views;
 
+    @Column
+    private Boolean limitedViews;
+
+    @Column
+    private Boolean limitedTime;
+
     @PrePersist
     protected void prePersist() {
-        if (this.loadDateTime == null) {
+        if (loadDateTime == null) {
             loadDateTime = LocalDateTime.now();
         }
-        if (this.expireTime == null && expireTimeInSeconds != null) {
-            expireTime = loadDateTime.plusSeconds(expireTimeInSeconds);
+        if (expireTimeInSeconds > 0) {
+            if (expireTime == null) {
+                expireTime = loadDateTime.plusSeconds(expireTimeInSeconds);
+                limitedTime = true;
+            }
+        } else {
+            limitedTime = false;
         }
+        limitedViews = views > 0;
     }
 
     public LocalDateTime getExpireTime() {
@@ -97,6 +109,22 @@ public class CodeInfo {
 
     public void setExpireTimeInSeconds(Long expireTimeInSeconds) {
         this.expireTimeInSeconds = expireTimeInSeconds;
+    }
+
+    public Boolean isLimitedViews() {
+        return limitedViews;
+    }
+
+    public void markAsLimitedViews(Boolean limitedViews) {
+        this.limitedViews = limitedViews;
+    }
+
+    public Boolean isLimitedTime() {
+        return limitedTime;
+    }
+
+    public void markAsLimitedTime(Boolean limitedTime) {
+        this.limitedTime = limitedTime;
     }
 
     @Override

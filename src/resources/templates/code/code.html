@@ -11,8 +11,28 @@
 <body>
 <span id="load_date" class="load_date" th:text="${date}">
 </span>
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    if ([[${viewsRestriction}]] > 0) {
+        document.getElementById("restrictions").innerHTML = "<span id=\"views_restriction\"> <p th:text=\"${viewsRestriction}\"></p></span><br>"
+    }
+    if ([[${timeRestriction}]] > 0 ) {
+        document.getElementById("restrictions").innerHTML = "<span id=\"time_restriction\"> <p th:text=\"${timeRestriction}\"></p></span><br>"
+    }
+
+    /*]]>*/
+</script>
+<div id="restrictions">
+
+</div>
 <pre id="code_snippet" class="code_snippet" >
-    <code >
+<!--    <span id="time_restriction">-->
+<!--            <p th:text="${timeRestriction}"></p>-->
+<!--        </span>-->
+<!--        <span id="views_restriction">-->
+<!--            <p th:text="${viewsRestriction}"></p>-->
+<!--        </span>-->
+    <code>
         <p th:text="${code}"></p>
     </code>
     </pre>
