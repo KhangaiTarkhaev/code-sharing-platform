@@ -30,7 +30,8 @@ public class CodeController {
     CodeInfoValidationService codeInfoValidationService;
 
     @Autowired
-    public CodeController(CodeInfoDataAccessService codeInfoDataAccessService, CodeInfoDTOService codeInfoDTOService,
+    public CodeController(CodeInfoDataAccessService codeInfoDataAccessService,
+                          CodeInfoDTOService codeInfoDTOService,
                           CodeInfoValidationService codeInfoValidationService) {
         this.codeInfoDataAccessService = codeInfoDataAccessService;
         this.codeInfoDTOService = codeInfoDTOService;
@@ -52,8 +53,8 @@ public class CodeController {
             codeInfoDataAccessService.saveAfterView(codeInfo);
             model.addAttribute("date", codeInfoDTOResponse.getDate());
             model.addAttribute("code", codeInfoDTOResponse.getCode());
-            if (codeInfo.isLimitedViews()) model.addAttribute("viewsRestriction", codeInfoDTOResponse.getViews());
-            if (codeInfo.isLimitedTime())  model.addAttribute("timeRestriction", codeInfoDTOResponse.getTime());
+            model.addAttribute("viewsRestriction", codeInfoDTOResponse.getViews());
+            model.addAttribute("timeRestriction", codeInfoDTOResponse.getTime());
         }
         return "code/code";
     }

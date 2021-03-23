@@ -7,34 +7,39 @@
           href="//cdn.jsdelivr.net/gh/highlightjs/cdn-release@10.2.1/build/styles/default.min.css">
     <script src="//cdn.jsdelivr.net/gh/highlightjs/cdn-release@10.2.1/build/highlight.min.js"></script>
     <script>hljs.initHighlightingOnLoad();</script>
+    <script th:inline="javascript">
+        /*<![CDATA[*/
+        window.onload = function () {
+            hideRestrictionElements()
+        }
+
+        function hideRestrictionElements() {
+            let viewsRestrictionJs = [[${viewsRestriction}]];
+            let timeRestrictionJs = [[${timeRestriction}]];
+
+
+            if (viewsRestrictionJs > 0) {
+                document.getElementById("views_restriction_label").innerHTML = "<br><span id=\"views_restriction\">Views restriction: " + viewsRestrictionJs + "</span><br>"
+            }
+            if (timeRestrictionJs > 0) {
+                document.getElementById("time_restrictions_label").innerHTML = "<br><span id=\"time_restriction\">Time restriction: " + timeRestrictionJs + "</span><br>"
+            }
+        }
+
+        /*]]>*/
+    </script>
 </head>
 <body>
 <span id="load_date" class="load_date" th:text="${date}">
 </span>
-<script th:inline="javascript">
-    /*<![CDATA[*/
-    if ([[${viewsRestriction}]] > 0) {
-        document.getElementById("restrictions").innerHTML = "<span id=\"views_restriction\"> <p th:text=\"${viewsRestriction}\"></p></span><br>"
-    }
-    if ([[${timeRestriction}]] > 0 ) {
-        document.getElementById("restrictions").innerHTML = "<span id=\"time_restriction\"> <p th:text=\"${timeRestriction}\"></p></span><br>"
-    }
-
-    /*]]>*/
-</script>
-<div id="restrictions">
-
-</div>
-<pre id="code_snippet" class="code_snippet" >
-<!--    <span id="time_restriction">-->
-<!--            <p th:text="${timeRestriction}"></p>-->
-<!--        </span>-->
-<!--        <span id="views_restriction">-->
-<!--            <p th:text="${viewsRestriction}"></p>-->
-<!--        </span>-->
+<label id="time_restrictions_label">
+</label>
+<label id="views_restriction_label">
+</label>
+<pre id="code_snippet">
     <code>
         <p th:text="${code}"></p>
     </code>
-    </pre>
+</pre>
 </body>
 </html>

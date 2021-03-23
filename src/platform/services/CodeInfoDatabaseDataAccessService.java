@@ -25,8 +25,7 @@ public class CodeInfoDatabaseDataAccessService implements CodeInfoDataAccessServ
 
     @Override
     public Optional<CodeInfo> findById(UUID id) {
-        Optional<CodeInfo> codeInfoOptional = codeRepository.findById(id);
-        return  codeInfoOptional;
+        return codeRepository.findById(id);
     }
 
     public CodeInfo saveAfterView(CodeInfo codeInfo) {
